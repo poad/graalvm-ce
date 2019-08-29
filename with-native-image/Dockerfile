@@ -19,3 +19,9 @@ ENV PATH /usr/lib/jvm/graalvm-ce/bin:${PATH}
 
 RUN gu install native-image
 
+RUN apt-get update -qq \
+ && apt-get install -qqy —-no-install-recommends \
+      build-essential \
+      zlib1d-dev \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
