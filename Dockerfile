@@ -16,3 +16,10 @@ ARG VERSION
 COPY --from=downloader /tmp/graalvm-ce-${VERSION} /usr/lib/jvm/graalvm-ce
 
 ENV PATH /usr/lib/jvm/graalvm-ce/bin:${PATH}
+
+RUN apt-get update -qq \
+ && apt-get install -qqy —-no-install-recommends \
+      build-essential \
+      zlib1d-dev \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
