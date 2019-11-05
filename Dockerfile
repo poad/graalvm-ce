@@ -1,4 +1,4 @@
-ARG VERSION
+ARG VERSION="19.2.1"
 
 FROM buildpack-deps:curl as downloader
 
@@ -16,3 +16,8 @@ ARG VERSION
 COPY --from=downloader /tmp/graalvm-ce-${VERSION} /usr/lib/jvm/graalvm-ce
 
 ENV PATH /usr/lib/jvm/graalvm-ce/bin:${PATH}
+
+RUN groupadd -g 1000 java \
+ && useradd -g 1000 -l -m -s /bin/false -u 1000 java
+
+USER java
