@@ -1,4 +1,4 @@
-ARG VERSION="19.3.0"
+ARG VERSION="19.3.1"
 
 FROM buildpack-deps:curl as downloader
 
