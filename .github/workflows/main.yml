@@ -1,0 +1,51 @@
+name: Docker image build push
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:    
+    - master
+
+jobs:
+  docker_build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rules: [
+          { tag: 'jdk8', location: 'Dockerfile.java8' },
+          { tag: 'jdk11', location: 'Dockerfile' },
+          { tag: 'java8-native-image', location: 'Dockerfile.java8.with-native-image' },
+          { tag: 'latest', location: 'Dockerfile' },
+          { tag: 'native-image', location: 'Dockerfile.with-native-image' }
+        ]
+    steps:
+    - uses: actions/checkout@master
+      if: github.event_name == 'pull_request' && github.event_name != 'schedule'
+    - name: Build ${{ matrix.dir }}
+      if: github.event_name == 'pull_request' && github.event_name != 'schedule'
+      run: |
+        IMAGE_NAME=poad/graalvm-ce:${{ matrix.rules.tag }} && \
+        IMAGE_NAME=${IMAGE_NAME} DOCKERFILE_PATH=${{ matrix.rules.location }} hooks/build
+  docker_push:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rules: [
+          { tag: 'jdk8', location: 'Dockerfile.java8' },
+          { tag: 'jdk11', location: 'Dockerfile' },
+          { tag: 'java8-native-image', location: 'Dockerfile.java8.with-native-image' },
+          { tag: 'latest', location: 'Dockerfile' },
+          { tag: 'native-image', location: 'Dockerfile.with-native-image' }
+        ]
+    steps:
+    - uses: actions/checkout@master
+      if: github.event_name != 'pull_request' && github.event_name != 'schedule' && env.CHANGE_STATE != 'changed'
+    - name: Build ${{ matrix.rules.tag }} and push
+      if: github.event_name != 'pull_request' && github.event_name != 'schedule' && env.CHANGE_STATE != 'changed'
+      run: |
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u poad --password-stdin && \
+        IMAGE_NAME=poad/graalvm-ce:${{ matrix.rules.tag }} && \
+        IMAGE_NAME=${IMAGE_NAME} DOCKERFILE_PATH=${{ matrix.rules.location }} hooks/build && \
+        docker push ${IMAGE_NAME}

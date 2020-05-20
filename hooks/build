@@ -4,16 +4,16 @@ set -eux
 echo "------ HOOK START - BUILD -------"
 printenv
 
-if [ "$DOCKERFILE_PATH" = "" ]; then
+if [ "${DOCKERFILE_PATH}" = "" ]; then
     DOCKERFILE_PATH_ARG=""
 else
-    DOCKERFILE_PATH_ARG="-f $DOCKERFILE_PATH"
+    DOCKERFILE_PATH_ARG="-f ${DOCKERFILE_PATH}"
 fi
 
 DOCKER_CONTENT_TRUST=1
 
-docker build --build-arg BASE_TAG=${DOCKER_TAG} \
-    --build-arg VERSION="20.0.0" \
-    ${DOCKERFILE_PATH_ARG} -t $IMAGE_NAME .
+docker build \
+    --build-arg VERSION="20.1.0" \
+    ${DOCKERFILE_PATH_ARG} -t ${IMAGE_NAME} .
 
 echo "------ HOOK END - BUILD -------"
