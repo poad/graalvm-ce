@@ -13,7 +13,7 @@ fi
 DOCKER_CONTENT_TRUST=1
 
 docker build \
-    --build-arg VERSION="20.2.0" \
+    --build-arg VERSION="20.3.0" \
     ${DOCKERFILE_PATH_ARG} -t ${IMAGE_NAME} .
 
 echo "------ HOOK END - BUILD -------"
