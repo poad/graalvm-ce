@@ -4,6 +4,7 @@ ARG TARGET_JAVA_VERSION="8"
 FROM buildpack-deps:curl as downloader
 
 ARG VERSION
+ARG TARGET_JAVA_VERSION
 
 WORKDIR /tmp
 
