@@ -27,4 +27,8 @@ USER java
 
 FROM default AS with-native-image
 
+USER root
+
 RUN gu install native-image
+
+USER java
