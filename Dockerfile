@@ -23,6 +23,6 @@ RUN groupadd -g 1000 java \
 
 USER java
 
-FROM default
+FROM default AS with-native-image
 
 RUN gu install native-image
