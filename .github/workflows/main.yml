@@ -14,38 +14,48 @@ jobs:
     strategy:
       matrix:
         rules: [
-          { tag: 'jdk8', location: 'Dockerfile.java8' },
-          { tag: 'jdk11', location: 'Dockerfile' },
-          { tag: 'java8-native-image', location: 'Dockerfile.java8.with-native-image' },
-          { tag: 'latest', location: 'Dockerfile' },
-          { tag: 'native-image', location: 'Dockerfile.with-native-image' }
+          { tag: 'jdk8', java_version: '8', target: 'default' },
+          { tag: 'jdk11', java_version: '11', target: 'default' },
+          { tag: 'jdk8-native-image', java_version: '8', target: '' },
+          { tag: 'latest', java_version: '11', target: 'default' },
+          { tag: 'native-image', java_version: '11', target: '' }
         ]
     steps:
     - uses: actions/checkout@master
       if: github.event_name == 'pull_request' && github.event_name != 'schedule'
     - name: Build ${{ matrix.dir }}
       if: github.event_name == 'pull_request' && github.event_name != 'schedule'
+      env:
+        TAG: poad/graalvm-ce:${{ matrix.rules.tag }}
       run: |
-        IMAGE_NAME=poad/graalvm-ce:${{ matrix.rules.tag }} && \
-        IMAGE_NAME=${IMAGE_NAME} DOCKERFILE_PATH=${{ matrix.rules.location }} hooks/build
+        if [ -n ${{ matrix.rules.target }} ]; then
+          docker build --args TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} --target=${{ matrix.rules.target }} .
+        else
+          docker build --args TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} .
+        fi
   docker_push:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         rules: [
-          { tag: 'jdk8', location: 'Dockerfile.java8' },
-          { tag: 'jdk11', location: 'Dockerfile' },
-          { tag: 'java8-native-image', location: 'Dockerfile.java8.with-native-image' },
-          { tag: 'latest', location: 'Dockerfile' },
-          { tag: 'native-image', location: 'Dockerfile.with-native-image' }
+          { tag: 'jdk8', java_version: '8', target: 'default' },
+          { tag: 'jdk11', java_version: '11', target: 'default' },
+          { tag: 'jdk8-native-image', java_version: '8', target: '' },
+          { tag: 'latest', java_version: '11', target: 'default' },
+          { tag: 'native-image', java_version: '11', target: '' }
         ]
     steps:
     - uses: actions/checkout@master
       if: github.event_name != 'pull_request' && github.event_name != 'schedule' && env.CHANGE_STATE != 'changed'
     - name: Build ${{ matrix.rules.tag }} and push
       if: github.event_name != 'pull_request' && github.event_name != 'schedule' && env.CHANGE_STATE != 'changed'
+      env:
+        TAG: poad/graalvm-ce:${{ matrix.rules.tag }}
       run: |
-        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u poad --password-stdin && \
-        IMAGE_NAME=poad/graalvm-ce:${{ matrix.rules.tag }} && \
-        IMAGE_NAME=${IMAGE_NAME} DOCKERFILE_PATH=${{ matrix.rules.location }} hooks/build && \
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u poad --password-stdin
+        if [ -n ${{ matrix.rules.target }} ]; then
+          docker build --args TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} --target=${{ matrix.rules.target }} .
+        else
+          docker build --args TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} .
+        fi
         docker push ${IMAGE_NAME}

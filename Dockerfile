@@ -1,4 +1,5 @@
 ARG VERSION="20.3.0"
+ARG TARGET_JAVA_VERSION="8"
 
 FROM buildpack-deps:curl as downloader
 
@@ -6,8 +7,8 @@ ARG VERSION
 
 WORKDIR /tmp
 
-RUN curl -sSLO https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${VERSION}/graalvm-ce-java11-linux-amd64-${VERSION}.tar.gz \
- && tar xf graalvm-ce-java11-linux-amd64-${VERSION}.tar.gz
+RUN curl -sSLO https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${VERSION}/graalvm-ce-java${TARGET_JAVA_VERSION}-linux-amd64-${VERSION}.tar.gz \
+ && tar xf graalvm-ce-java${TARGET_JAVA_VERSION}-linux-amd64-${VERSION}.tar.gz
 
 FROM buildpack-deps:stable
 
