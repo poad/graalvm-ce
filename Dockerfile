@@ -22,3 +22,7 @@ RUN groupadd -g 1000 java \
  && useradd -g 1000 -l -m -s /bin/false -u 1000 java
 
 USER java
+
+FROM default
+
+RUN gu install native-image
