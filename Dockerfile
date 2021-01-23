@@ -10,7 +10,7 @@ WORKDIR /tmp
 RUN curl -sSLO https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${VERSION}/graalvm-ce-java${TARGET_JAVA_VERSION}-linux-amd64-${VERSION}.tar.gz \
  && tar xf graalvm-ce-java${TARGET_JAVA_VERSION}-linux-amd64-${VERSION}.tar.gz
 
-FROM buildpack-deps:stable
+FROM buildpack-deps:stable AS default
 
 ARG VERSION
 
