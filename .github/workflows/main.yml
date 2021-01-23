@@ -29,9 +29,9 @@ jobs:
         TAG: poad/graalvm-ce:${{ matrix.rules.tag }}
       run: |
         if [ -n ${{ matrix.rules.target }} ]; then
-          docker build --args TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} --target=${{ matrix.rules.target }} .
+          docker build --build-arg TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} --target=${{ matrix.rules.target }} .
         else
-          docker build --args TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} .
+          docker build --build-arg TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} .
         fi
   docker_push:
     runs-on: ubuntu-latest
@@ -54,8 +54,8 @@ jobs:
       run: |
         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u poad --password-stdin
         if [ -n ${{ matrix.rules.target }} ]; then
-          docker build --args TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} --target=${{ matrix.rules.target }} .
+          docker build --build-arg TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} --target=${{ matrix.rules.target }} .
         else
-          docker build --args TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} .
+          docker build --build-arg TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} .
         fi
         docker push ${IMAGE_NAME}
