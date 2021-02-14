@@ -54,8 +54,8 @@ jobs:
       run: |
         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u poad --password-stdin
         if [ -n ${{ matrix.rules.target }} ]; then
-          docker build --build-arg TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} --target=${{ matrix.rules.target }} .
+          docker build --build-arg TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} --target=${{ matrix.rules.target }} -t ${TAG} .
         else
-          docker build --build-arg TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} .
+          docker build --build-arg TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} -t ${TAG} .
         fi
-        docker push ${IMAGE_NAME}
+        docker push ${TAG}
