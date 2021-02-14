@@ -1,6 +1,6 @@
 # graalvm-ce
 
-![Docker build and push](https://github.com/poad/graalvm-ce/workflows/Docker%20build%20and%20push/badge.svg)
+![Docker image build push](https://github.com/poad/graalvm-ce/workflows/Docker%20image%20build%20push/badge.svg)
 [![GitHub issues](https://img.shields.io/github/issues/poad/graalvm-ce.svg "GitHub issues")](https://github.com/poad/graalvm-ce)
 [![GitHub stars](https://img.shields.io/github/stars/poad/graalvm-ce.svg "GitHub stars")](https://github.com/poad/graalvm-ce)
 
