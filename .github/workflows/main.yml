@@ -58,4 +58,4 @@ jobs:
         else
           docker build --build-arg TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} .
         fi
-        docker push ${IMAGE_NAME}
+        docker push ${TAG}
