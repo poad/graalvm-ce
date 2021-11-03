@@ -32,9 +32,9 @@ jobs:
     strategy:
       matrix:
         rules: [
-          { tag: 'jdk8', java_version: '8', target: 'default' },
+          { tag: 'jdk17', java_version: '17', target: 'default' },
           { tag: 'jdk11', java_version: '11', target: 'default' },
-          { tag: 'jdk8-native-image', java_version: '8', target: '' },
+          { tag: 'jdk17-native-image', java_version: '17', target: '' },
           { tag: 'latest', java_version: '11', target: 'default' },
           { tag: 'native-image', java_version: '11', target: '' }
         ]
@@ -56,9 +56,9 @@ jobs:
     strategy:
       matrix:
         rules: [
-          { tag: 'jdk8', java_version: '8', target: 'default' },
+          { tag: 'jdk17', java_version: '17', target: 'default' },
           { tag: 'jdk11', java_version: '11', target: 'default' },
-          { tag: 'jdk8-native-image', java_version: '8', target: '' },
+          { tag: 'jdk17-native-image', java_version: '17', target: '' },
           { tag: 'latest', java_version: '11', target: 'default' },
           { tag: 'native-image', java_version: '11', target: '' }
         ]

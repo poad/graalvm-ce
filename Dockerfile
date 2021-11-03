@@ -1,5 +1,5 @@
 ARG VERSION="21.3.0"
-ARG TARGET_JAVA_VERSION="8"
+ARG TARGET_JAVA_VERSION="11"
 
 FROM buildpack-deps:curl as downloader
 

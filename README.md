@@ -10,8 +10,8 @@ Docker image GraalVM CE.
 
 | Tag | Based Java version | with Native Image |
 |:---:|:---:|:---:|
-| jdk8 | 8  | No  |
-| jdk8-native-image | 8  | Yes |
+| jdk17 | 17  | No  |
+| jdk17-native-image | 17  | Yes |
 | jdk11 | 11 | No  |
 | native-image | 11 | Yes |
 | latest | 11 | No  |
