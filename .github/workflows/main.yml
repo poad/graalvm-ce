@@ -56,24 +56,63 @@ jobs:
     strategy:
       matrix:
         rules: [
-          { tag: 'jdk17', java_version: '17', target: 'default' },
-          { tag: 'jdk11', java_version: '11', target: 'default' },
-          { tag: 'jdk17-native-image', java_version: '17', target: '' },
-          { tag: 'latest', java_version: '11', target: 'default' },
-          { tag: 'native-image', java_version: '11', target: '' }
+          { tag: 'jdk17', java_version: '17', target: 'default', platforms: 'linux/amd64,linux/arm64' },
+          { tag: 'jdk11', java_version: '11', target: 'default', platforms: 'linux/amd64,linux/arm64' },
+          { tag: 'jdk17-native-image', java_version: '17', target: '', platforms: 'linux/amd64,linux/arm64' },
+          { tag: 'latest', java_version: '11', target: 'default', platforms: 'linux/amd64,linux/arm64' },
+          { tag: 'native-image', java_version: '11', target: '', platforms: 'linux/amd64,linux/arm64' }
         ]
     steps:
     - uses: actions/checkout@master
       if: github.event_name != 'pull_request' && github.event_name != 'schedule' && env.CHANGE_STATE != 'changed'
-    - name: Build ${{ matrix.rules.tag }} and push
+
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+      with:
+        install: true
+
+    - uses: actions/cache@v2
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+
+    - name: Login to DockerHub
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@v1 
+      with:
+        username: poad
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: "Build ${{ matrix.rules.tag }}"
+      if: github.event_name == 'pull_request' && github.event_name != 'schedule'
+      uses: docker/build-push-action@v2
+      with:
+        push: false
+        pull: true
+        context: ${{ matrix.rules.dir }}
+        platforms: ${{ matrix.rules.platforms }}
+        tags: poad/graalvm-ce:${{ matrix.rules.tag }}
+        target: ${{ matrix.rules.target }}
+        build-args: |
+          BUILDKIT_INLINE_CACHE=1
+          TARGET_JAVA_VERSION=${{ matrix.rules.java_version }}
+  
+    - name: "Build and push ${{ matrix.rules.tag }}"
       if: github.event_name != 'pull_request' && github.event_name != 'schedule' && env.CHANGE_STATE != 'changed'
-      env:
-        TAG: poad/graalvm-ce:${{ matrix.rules.tag }}
-      run: |
-        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u poad --password-stdin
-        if [ -n ${{ matrix.rules.target }} ]; then
-          docker build --build-arg TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} --target=${{ matrix.rules.target }} -t ${TAG} .
-        else
-          docker build --build-arg TARGET_JAVA_VERSION=${{ matrix.rules.java_version }} -t ${TAG} .
-        fi
-        docker push ${TAG}
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        pull: true
+        context: ${{ matrix.rules.dir }}
+        platforms: ${{ matrix.rules.platforms }}
+        tags: poad/graalvm-ce:${{ matrix.rules.tag }}
+        target: ${{ matrix.rules.target }}
+        build-args: |
+          BUILDKIT_INLINE_CACHE=1
+          TARGET_JAVA_VERSION=${{ matrix.rules.java_version }}
