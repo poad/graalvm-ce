@@ -13,8 +13,9 @@ Docker image GraalVM CE.
 | jdk17 | 17  | No  |
 | jdk17-native-image | 17  | Yes |
 | jdk11 | 11 | No  |
-| native-image | 11 | Yes |
-| latest | 11 | No  |
+| jdk11-native-image | 11  | Yes |
+| native-image | 17 | Yes |
+| latest | 17 | No  |
 
 ## Useage
 

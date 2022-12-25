@@ -34,9 +34,10 @@ jobs:
         rules: [
           { tag: 'jdk17', java_version: '17', target: 'default' },
           { tag: 'jdk11', java_version: '11', target: 'default' },
+          { tag: 'jdk11-native-image', java_version: '11', target: '' },
           { tag: 'jdk17-native-image', java_version: '17', target: '' },
-          { tag: 'latest', java_version: '11', target: 'default' },
-          { tag: 'native-image', java_version: '11', target: '' }
+          { tag: 'latest', java_version: '17', target: 'default' },
+          { tag: 'native-image', java_version: '17', target: '' }
         ]
     steps:
     - uses: actions/checkout@v3
@@ -58,9 +59,10 @@ jobs:
         rules: [
           { tag: 'jdk17', java_version: '17', target: 'default', platforms: 'linux/amd64,linux/arm64' },
           { tag: 'jdk11', java_version: '11', target: 'default', platforms: 'linux/amd64,linux/arm64' },
+          { tag: 'jdk11-native-image', java_version: '11', target: '', platforms: 'linux/amd64,linux/arm64' },
           { tag: 'jdk17-native-image', java_version: '17', target: '', platforms: 'linux/amd64,linux/arm64' },
-          { tag: 'latest', java_version: '11', target: 'default', platforms: 'linux/amd64,linux/arm64' },
-          { tag: 'native-image', java_version: '11', target: '', platforms: 'linux/amd64,linux/arm64' }
+          { tag: 'latest', java_version: '17', target: 'default', platforms: 'linux/amd64,linux/arm64' },
+          { tag: 'native-image', java_version: '17', target: '', platforms: 'linux/amd64,linux/arm64' }
         ]
     steps:
     - uses: actions/checkout@v3
