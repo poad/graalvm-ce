@@ -40,7 +40,7 @@ jobs:
           { tag: 'native-image', java_version: '17', target: '' }
         ]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       if: github.event_name == 'pull_request' && github.event_name != 'schedule'
     - name: Build ${{ matrix.dir }}
       if: github.event_name == 'pull_request' && github.event_name != 'schedule'
@@ -65,7 +65,7 @@ jobs:
           { tag: 'native-image', java_version: '17', target: '', platforms: 'linux/amd64,linux/arm64' }
         ]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       if: github.event_name != 'pull_request' && github.event_name != 'schedule' && env.CHANGE_STATE != 'changed'
 
 
