@@ -93,7 +93,7 @@ jobs:
 
     - name: "Build ${{ matrix.rules.tag }}"
       if: github.event_name == 'pull_request' && github.event_name != 'schedule'
-      uses: docker/build-push-action@v4
+      uses: docker/build-push-action@v5
       with:
         push: false
         pull: true
@@ -107,7 +107,7 @@ jobs:
   
     - name: "Build and push ${{ matrix.rules.tag }}"
       if: github.event_name != 'pull_request' && github.event_name != 'schedule' && env.CHANGE_STATE != 'changed'
-      uses: docker/build-push-action@v4
+      uses: docker/build-push-action@v5
       with:
         push: true
         pull: true
